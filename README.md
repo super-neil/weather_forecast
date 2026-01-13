@@ -1,85 +1,46 @@
-# 🧠 GeoPredictor Backend Engine
+# UK WeatherPredict | Predictive Backend Engine
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)
-![API Version](https://img.shields.io/badge/api-v1.0-blue.svg)
+![Region](https://img.shields.io/badge/region-UK_Only-red.svg)
+![API Version](https://img.shields.io/badge/api-v2.1-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 ## 📖 Overview
 
-**GeoPredictor Backend** is the high-performance inference engine powering the GeoCoordinate project. Unlike standard geospatial tools, this system acts as an intelligent layer that accepts raw geographical input, performs robust data sanitization, and utilizes historical datasets to generate predictive insights.
+**UK WeatherPredict** is a specialized high-performance inference engine designed exclusively for meteorological forecasting within the United Kingdom.
 
-While the frontend serves as the entry point, this backend handles the critical logic: **input validation, spatial algorithm execution, and JSON response generation.**
+Unlike generic global weather APIs, this backend is optimized for the unique microclimates of the British Isles. It accepts geographical coordinates, performs strict region-locking validation, and utilizes a localized historical dataset (calibrated against Met Office patterns) to generate hyper-local weather probabilities.
+
+While the frontend handles user interaction, this backend handles the heavy lifting: **UK-specific coordinate validation, spatial algorithm execution, and predictive forecast generation.**
 
 ---
 
 ## ✨ Key Features
 
-* **Robust Input Sanitization:** Automatically detects and converts data types (handling String/Float mismatches) to prevent runtime errors.
-* **Predictive Inference:** Uses historical spatial data to calculate probabilities based on location.
-* **High-Speed API:** Lightweight RESTful architecture designed for low-latency responses.
-* **Error Handling:** Graceful degradation and detailed error messaging for malformed coordinates.
+* **Region-Locked Validation:** Automatically rejects coordinates outside the UK bounding box (approx. 49°N to 61°N) to ensure model accuracy.
+* **Microclimate Inference:** Uses a weighted regression model optimized for UK topography (e.g., Highlands vs. Fens).
+* **Rain Probability Engine:** Specialized algorithms for high-precision precipitation forecasting, a critical metric for UK users.
+* **Type Safety:** Robust handling of input data types to prevent server crashes on malformed requests.
 
 ---
 
 ## 🏗️ Architecture & Data Flow
 
-The system operates on a linear request-response cycle optimized for accuracy:
+The system operates on a linear request-response cycle optimized for accuracy within the UK domain:
 
 1.  **Ingestion (API Gateway):**
     The API endpoint accepts a `POST` request containing geographical coordinates (Latitude/Longitude).
 
-2.  **Validation Guard:**
-    The system inspects incoming variables to ensure they are valid numbers. It handles type conversion (e.g., parsing strings to floats) to prevent `TypeError` crashes before they reach the core logic.
+2.  **UK Boundary Guard:**
+    The system first verifies if the coordinates fall within the United Kingdom's spatial extents.
+    * *Latitude:* 49.00°N - 61.00°N
+    * *Longitude:* -8.00°W - 2.00°E
+    * *Action:* If outside these bounds, the request is rejected immediately to save processing power.
 
 3.  **Predictive Core:**
-    Once validated, coordinates are mapped against internal datasets. The inference algorithm determines the predictive outcome based on spatial density and historical trends.
+    Valid coordinates are mapped against our internal UK climate dataset. The inference algorithm calculates weather stability, precipitation probability, and wind shear based on historical averages for that specific grid reference.
 
 4.  **Response Formatter:**
-    The results are serialized into a strict JSON format, ready for consumption by the client.
+    The results are serialized into a strict JSON format containing weather-specific metrics.
 
 ---
-
-## 🔌 API Documentation
-
-### Get Prediction
-Returns a predictive analysis based on the provided location.
-
-* **URL:** `/api/v1/predict`
-* **Method:** `POST`
-* **Content-Type:** `application/json`
-
-#### Request Payload
-```json
-{
-  "latitude": "40.7128", 
-  "longitude": -74.0060,
-  "timestamp": "2023-10-27T10:00:00Z"
-}
-```
-Success Response (200 OK)
-
-```json
-{
-  "status": "success",
-  "data": {
-    "prediction": "High Probability",
-    "confidence_score": 0.94,
-    "input_summary": {
-      "lat": 40.71,
-      "lng": -74.01
-    }
-  }
-}
-```
-
-Error Response (400 Bad Request)
-
-```json
-{
-  "status": "error",
-  "message": "Invalid coordinate format. 'lat' must be parsable as a number."
-}
-```
-
-## 📄 License
-Distributed under the MIT License.
