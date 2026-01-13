@@ -1,0 +1,10 @@
+numpy
+pandas
+scikit-learn
+tqdm
+openmeteo-requests
+requests-cache
+retry-requests
+fastapi
+uvicorn
+joblib

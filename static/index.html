@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Weather UK</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <div class="container">
+        <div class="sidebar">
+            <h1>🇬🇧 AI Weather</h1>
+            <p>Click anywhere on the map to generate a live AI forecast.</p>
+            
+            <div id="loading" class="hidden">Thinking...</div>
+
+            <div id="result" class="hidden">
+                <h2 id="location-name">Unknown Location</h2>
+                <div class="coords" id="coords">Lat: -, Long: -</div>
+                
+                <div class="card">
+                    <div class="metric">
+                        <span class="label">Temperature</span>
+                        <span class="value" id="temp">--</span>
+                        <span class="unit">°C</span>
+                    </div>
+                </div>
+
+                <div class="card-row">
+                    <div class="card small">
+                        <span class="label">Rain</span>
+                        <span class="value" id="rain">--</span>
+                        <span class="unit">mm</span>
+                    </div>
+                    <div class="card small">
+                        <span class="label">Wind</span>
+                        <span class="value" id="wind">--</span>
+                        <span class="unit">km/h</span>
+                    </div>
+                </div>
+                
+                <p class="desc" id="desc">Hybrid Gradient Boosting Model</p>
+            </div>
+        </div>
+
+        <div id="map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/static/script.js"></script>
+</body>
+</html>
